@@ -1,4 +1,4 @@
-![](assets/banners/horizontal/kanjiless.png)
+![](assets/banners/horizontal/kanji.png)
 
 # Ouhi-sama 王妃様
 
