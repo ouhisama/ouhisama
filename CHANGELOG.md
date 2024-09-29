@@ -1,5 +1,7 @@
-# Ouhi-sama - Changelog
+![](assets/banners/horizontal/kanjiless.png)
+
+# Ouhi-sama 王妃様 - Chnagelog
 
 Ouhi-sama wa programming language desu.
 
-![](assets/banners/horizontal/kanjiless.png)
+Here's the changelog for Ouhi-sama, and all notable changes to her will be documented in this file.
