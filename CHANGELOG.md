@@ -1,4 +1,4 @@
-![](assets/banners/horizontal/kanji.png)
+![](assets/banners/kanji.png)
 
 # Ouhi-sama 王妃様 - Chnagelog
 
