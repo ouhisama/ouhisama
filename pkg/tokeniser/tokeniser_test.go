@@ -8,7 +8,7 @@ import (
 )
 
 func Test_Tokeniser(t *testing.T) {
-	source :=`(10 + 20) * 30`
+	source := `(10 + 20) * 30`
 	tokens := Tokenise(source)
 	want := []string{
 		"LBracket\n",
