@@ -1,6 +1,6 @@
 ![](assets/banners/kanji.png)
 
-# Ouhi-sama 王妃様 - Todo
+# Ouhi-sama 王妃様 - Todos
 
 Ouhi-sama wa programming language desu.
 

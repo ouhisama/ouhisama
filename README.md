@@ -10,7 +10,7 @@ Here's the changelog for Ouhi-sama, and all notable changes to her will be docum
 
 Go to [CHANGELOG.md](CHANGELOG.md) to see the details of changelog.
 
-## ✔️ Todo
+## ✔️ Todos
 
 Hopefully we won't get too many todos and they won't get forgotten. If you've got any ideas to help out, please let us know by creating an issue or a pull request.
 
