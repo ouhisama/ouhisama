@@ -2,7 +2,9 @@ package tokeniser
 
 import "testing"
 
-var tokens = TokenList{
+const length = 15
+
+var tokens = [length]Token{
 	New(EOF, "\x00"),
 	New(Newline, "\n"),
 	New(Whitespace, " "),
@@ -20,8 +22,8 @@ var tokens = TokenList{
 	New(RBraket, ")"),
 }
 
-func TestTokenKindString(t *testing.T) {
-	want := []string{
+func TestTokenKind_String(t *testing.T) {
+	want := [length]string{
 		"EOF",
 		"Newline",
 		"Whitespace",
@@ -40,13 +42,36 @@ func TestTokenKindString(t *testing.T) {
 	}
 	for i, token := range tokens {
 		if token.Kind.String() != want[i] {
-			t.Fatalf("ERROR Expected `%v`, got `%v`", want[i], token.Kind.String())
+			t.Fatalf("ERROR Expected `%v`, but got `%v`", want[i], token.Kind.String())
 		}
 	}
-	t.Logf("SUCCESS All passed")
+	t.Log("SUCCESS All passed")
 }
 
-func TestTokenDebug(t *testing.T) {
+func TestToken_isOneOf(t *testing.T) {
+	want := [length]bool{
+		false,
+		false,
+		false,
+		false,
+		true,
+		true,
+		true,
+		false,
+		false,
+		false,
+		false,
+		false,
+	}
+	for i, token := range tokens {
+		if token.isOneOf(Identifier, Number, String) != want[i] {
+			t.Fatalf("ERROR Expected `%v: \"%v\"` to get `%v`, but got `%v`", token.Kind.String(), token.Value, want[i], token.isOneOf(Identifier, Number, String))
+		}
+	}
+	t.Log("SUCCESS All passed")
+}
+
+func TestToken_Debug(t *testing.T) {
 	for _, token := range tokens {
 		token.Debug()
 	}
@@ -68,8 +93,8 @@ func TestTokenDebug(t *testing.T) {
 	// RBracket: ""
 }
 
-func TestNew(t *testing.T) {
-	want := TokenList{
+func Test_New(t *testing.T) {
+	want := [length]Token{
 		{Kind: EOF, Value: "\x00"},
 		{Kind: Newline, Value: "\n"},
 		{Kind: Whitespace, Value: " "},
@@ -88,8 +113,8 @@ func TestNew(t *testing.T) {
 	}
 	for i, token := range tokens {
 		if token != want[i] {
-			t.Fatalf("ERROR Expected `%v: \"%v\"`, got `%v \"%v\"`", want[i].Kind.String(), want[i].Value, token.Kind.String(), token.Value)
+			t.Fatalf("ERROR Expected `%v: \"%v\"`, but got `%v \"%v\"`", want[i].Kind.String(), want[i].Value, token.Kind.String(), token.Value)
 		}
 	}
-	t.Logf("SUCCESS All passed")
+	t.Log("SUCCESS All passed")
 }

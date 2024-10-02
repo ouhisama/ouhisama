@@ -1,6 +1,9 @@
 package tokeniser
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 type TokenKind uint
 
@@ -71,12 +74,7 @@ type Token struct {
 }
 
 func (token Token) isOneOf(kinds ...TokenKind) bool {
-	for _, kind := range kinds {
-		if token.Kind == kind {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(kinds, token.Kind)
 }
 
 func (token Token) Debug() {
@@ -86,8 +84,6 @@ func (token Token) Debug() {
 		fmt.Printf("%v: \"\"\n", token.Kind.String())
 	}
 }
-
-type TokenList []Token
 
 func New(kind TokenKind, value TokenValue) Token {
 	return Token{
