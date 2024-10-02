@@ -24,6 +24,12 @@ Now, before you start contributing, please read the following guidelines. We all
 
 Read the guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 🔒 Security Policy
+
+In Ouhi-sama, there are some signicant infomations about security you have to know. We also hope you can help us keep her safe by reporting security issues.
+
+See more infomations in [SECURITY.md](SECURITY.md).
+
 ## 📜 License
 
 GNU General Public License v3.0
