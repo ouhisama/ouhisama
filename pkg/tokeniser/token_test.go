@@ -1,104 +1,72 @@
 package tokeniser
 
-import "testing"
+import (
+	"bytes"
+	"io"
+	"os"
+	"testing"
+)
 
-const length = 15
+const test_token_length = 15
 
-var tokens = [length]Token{
-	New(EOF, "\x00"),
-	New(Newline, "\n"),
-	New(Whitespace, " "),
-	New(Indentation, "\t"),
-	New(Identifier, "uynilo9"),
-	New(Number, "213"),
-	New(String, "hello world"),
-	New(Equal, "="),
-	New(Plus, "+"),
-	New(Hyphen, "-"),
-	New(Star, "*"),
-	New(Slash, "/"),
-	New(Percent, "%"),
-	New(LBraket, "("),
-	New(RBraket, ")"),
-}
-
-func TestTokenKind_String(t *testing.T) {
-	want := [length]string{
-		"EOF",
-		"Newline",
-		"Whitespace",
-		"Indentation",
-		"Identifier",
-		"Number",
-		"String",
-		"Equal",
-		"Plus",
-		"Hyphen",
-		"Star",
-		"Slash",
-		"Percent",
-		"LBracket",
-		"RBracket",
-	}
-	for i, token := range tokens {
-		if token.Kind.String() != want[i] {
-			t.Fatalf("ERROR Expected `%v`, but got `%v`", want[i], token.Kind.String())
-		}
-	}
-	t.Log("SUCCESS All passed")
-}
-
-func TestToken_isOneOf(t *testing.T) {
-	want := [length]bool{
-		false,
-		false,
-		false,
-		false,
-		true,
-		true,
-		true,
-		false,
-		false,
-		false,
-		false,
-		false,
-	}
-	for i, token := range tokens {
-		if token.isOneOf(Identifier, Number, String) != want[i] {
-			t.Fatalf("ERROR Expected `%v: \"%v\"` to get `%v`, but got `%v`", token.Kind.String(), token.Value, want[i], token.isOneOf(Identifier, Number, String))
-		}
-	}
-	t.Log("SUCCESS All passed")
+var tokens = [test_token_length]Token{
+	newToken(EOF, ""),
+	newToken(Newline, "\n"),
+	newToken(Indentation, "\t"),
+	newToken(Whitespace, " "),
+	newToken(Identifier, "uynilo9"),
+	newToken(Number, "213"),
+	newToken(String, "hello world"),
+	newToken(Equal, "="),
+	newToken(Plus, "+"),
+	newToken(Hyphen, "-"),
+	newToken(Star, "*"),
+	newToken(Slash, "/"),
+	newToken(Percent, "%"),
+	newToken(LBracket, "("),
+	newToken(RBracket, ")"),
 }
 
 func TestToken_Debug(t *testing.T) {
-	for _, token := range tokens {
-		token.Debug()
+	want := [test_token_length]string{
+		"EOF\n",
+		"Newline\n",
+		"Indentation\n",
+		"Whitespace\n",
+		"Identifier: \"uynilo9\"\n",
+		"Number: \"213\"\n",
+		"String: \"hello world\"\n",
+		"Equal\n",
+		"Plus\n",
+		"Hyphen\n",
+		"Star\n",
+		"Slash\n",
+		"Percent\n",
+		"LBracket\n",
+		"RBracket\n",
 	}
-	// Output:
-	// EOF: ""
-	// Newline: ""
-	// Whitespace: ""
-	// Indentation: ""
-	// Identifier: "uynilo9"
-	// Number: "213"
-	// String: "hello world"
-	// Equal: ""
-	// Plus: ""
-	// Hyphen: ""
-	// Star: ""
-	// Slash: ""
-	// Percent: ""
-	// LBracket: ""
-	// RBracket: ""
+	for i, token := range tokens {
+		stdout := os.Stdout
+		var buffer bytes.Buffer
+		read, write, _ := os.Pipe()
+		os.Stdout = write
+		token.Debug()
+		write.Close()
+		os.Stdout = stdout
+		io.Copy(&buffer, read)
+		if buffer.String() != want[i] {
+			t.Fatalf("ERROR Expected `%v`, but got `%v`", want[i], buffer.String())
+		}
+	}
+	t.Log("SUCCESS All passed")
 }
 
-func Test_New(t *testing.T) {
-	want := [length]Token{
-		{Kind: EOF, Value: "\x00"},
+func Test_newToken(t *testing.T) {
+	want := [test_token_length]Token{
+		{Kind: EOF, Value: ""},
 		{Kind: Newline, Value: "\n"},
-		{Kind: Whitespace, Value: " "},
 		{Kind: Indentation, Value: "\t"},
+		{Kind: Whitespace, Value: " "},
 		{Kind: Identifier, Value: "uynilo9"},
 		{Kind: Number, Value: "213"},
 		{Kind: String, Value: "hello world"},
@@ -108,12 +76,12 @@ func Test_New(t *testing.T) {
 		{Kind: Star, Value: "*"},
 		{Kind: Slash, Value: "/"},
 		{Kind: Percent, Value: "%"},
-		{Kind: LBraket, Value: "("},
-		{Kind: RBraket, Value: ")"},
+		{Kind: LBracket, Value: "("},
+		{Kind: RBracket, Value: ")"},
 	}
 	for i, token := range tokens {
 		if token != want[i] {
-			t.Fatalf("ERROR Expected `%v: \"%v\"`, but got `%v \"%v\"`", want[i].Kind.String(), want[i].Value, token.Kind.String(), token.Value)
+			t.Fatalf("ERROR Expected `%v: \"%v\"`, but got `%v \"%v\"`", want[i].Kind.string(), want[i].Value, token.Kind.string(), token.Value)
 		}
 	}
 	t.Log("SUCCESS All passed")

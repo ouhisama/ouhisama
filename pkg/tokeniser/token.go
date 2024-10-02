@@ -10,8 +10,8 @@ type TokenKind uint
 const (
 	EOF TokenKind = iota
 	Newline
-	Whitespace
 	Indentation
+	Whitespace
 
 	Identifier
 	Number
@@ -25,20 +25,20 @@ const (
 	Slash
 	Percent
 
-	LBraket
-	RBraket
+	LBracket
+	RBracket
 )
 
-func (kind TokenKind) String() string {
-	switch kind {
+func (k TokenKind) string() string {
+	switch k {
 	case EOF:
 		return "EOF"
 	case Newline:
 		return "Newline"
-	case Whitespace:
-		return "Whitespace"
 	case Indentation:
 		return "Indentation"
+	case Whitespace:
+		return "Whitespace"
 	case Identifier:
 		return "Identifier"
 	case Number:
@@ -57,9 +57,9 @@ func (kind TokenKind) String() string {
 		return "Slash"
 	case Percent:
 		return "Percent"
-	case LBraket:
+	case LBracket:
 		return "LBracket"
-	case RBraket:
+	case RBracket:
 		return "RBracket"
 	default:
 		return "Unknown"
@@ -73,19 +73,19 @@ type Token struct {
 	Value TokenValue
 }
 
-func (token Token) isOneOf(kinds ...TokenKind) bool {
-	return slices.Contains(kinds, token.Kind)
+func (t Token) isOneOf(kinds ...TokenKind) bool {
+	return slices.Contains(kinds, t.Kind)
 }
 
-func (token Token) Debug() {
-	if token.isOneOf(Identifier, Number, String) {
-		fmt.Printf("%v: \"%v\"\n", token.Kind.String(), token.Value)
+func (t Token) Debug() {
+	if t.isOneOf(Identifier, Number, String) {
+		fmt.Printf("%v: \"%v\"\n", t.Kind.string(), t.Value)
 	} else {
-		fmt.Printf("%v: \"\"\n", token.Kind.String())
+		fmt.Printf("%v\n", t.Kind.string())
 	}
 }
 
-func New(kind TokenKind, value TokenValue) Token {
+func newToken(kind TokenKind, value TokenValue) Token {
 	return Token{
 		Kind:  kind,
 		Value: value,
