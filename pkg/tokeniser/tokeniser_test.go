@@ -37,5 +37,4 @@ func Test_Tokeniser(t *testing.T) {
 			t.Fatalf("ERROR Expected `%v`, but got `%v`", want[i], buffer.String())
 		}
 	}
-	t.Log("SUCCESS All passed")
 }

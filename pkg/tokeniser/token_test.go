@@ -56,7 +56,6 @@ func TestToken_Debug(t *testing.T) {
 			t.Fatalf("ERROR Expected `%v`, but got `%v`", want[i], buffer.String())
 		}
 	}
-	t.Log("SUCCESS All passed")
 }
 
 func Test_newToken(t *testing.T) {
@@ -82,5 +81,4 @@ func Test_newToken(t *testing.T) {
 			t.Fatalf("ERROR Expected `%v: \"%v\"`, but got `%v \"%v\"`", want[i].Kind.string(), want[i].Value, token.Kind.string(), token.Value)
 		}
 	}
-	t.Log("SUCCESS All passed")
 }
