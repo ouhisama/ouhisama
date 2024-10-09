@@ -110,7 +110,7 @@ func newTokeniser(source string) *tokeniser {
 		source: source,
 		position: position{
 			index:  0,
-			column: 0,
+			column: 1,
 			line:   1,
 		},
 	}
