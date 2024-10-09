@@ -11,18 +11,18 @@ func Test_Tokeniser(t *testing.T) {
 	source := `(10 + 20) * 30`
 	tokens := Tokenise(source)
 	want := []string{
-		"LBracket\n",
-		"Number: \"10\"\n",
-		"Whitespace\n",
-		"Plus\n",
-		"Whitespace\n",
-		"Number: \"20\"\n",
-		"RBracket\n",
-		"Whitespace\n",
-		"Star\n",
-		"Whitespace\n",
-		"Number: \"30\"\n",
-		"EOF\n",
+		"LBracket",
+		"Number: \"10\"",
+		"Whitespace",
+		"Plus",
+		"Whitespace",
+		"Number: \"20\"",
+		"RBracket",
+		"Whitespace",
+		"Star",
+		"Whitespace",
+		"Number: \"30\"",
+		"EOF",
 	}
 	for i, token := range tokens {
 		stdout := os.Stdout

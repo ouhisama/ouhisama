@@ -79,9 +79,9 @@ func (t Token) isOneOf(kinds ...TokenKind) bool {
 
 func (t Token) Debug() {
 	if t.isOneOf(Identifier, Number, String) {
-		fmt.Printf("%v: \"%v\"\n", t.Kind.string(), t.Value)
+		fmt.Printf("%v: \"%v\"", t.Kind.string(), t.Value)
 	} else {
-		fmt.Printf("%v\n", t.Kind.string())
+		fmt.Printf("%v", t.Kind.string())
 	}
 }
 

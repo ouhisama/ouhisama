@@ -27,21 +27,21 @@ var tokens = []Token{
 
 func TestToken_Debug(t *testing.T) {
 	want := []string{
-		"EOF\n",
-		"Newline\n",
-		"Indentation\n",
-		"Whitespace\n",
-		"Identifier: \"uynilo9\"\n",
-		"Number: \"213\"\n",
-		"String: \"hello world\"\n",
-		"Equal\n",
-		"Plus\n",
-		"Hyphen\n",
-		"Star\n",
-		"Slash\n",
-		"Percent\n",
-		"LBracket\n",
-		"RBracket\n",
+		"EOF",
+		"Newline",
+		"Indentation",
+		"Whitespace",
+		"Identifier: \"uynilo9\"",
+		"Number: \"213\"",
+		"String: \"hello world\"",
+		"Equal",
+		"Plus",
+		"Hyphen",
+		"Star",
+		"Slash",
+		"Percent",
+		"LBracket",
+		"RBracket",
 	}
 	for i, token := range tokens {
 		stdout := os.Stdout
