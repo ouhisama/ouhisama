@@ -135,7 +135,7 @@ func Tokenise(source string) []Token {
 		if !matched {
 			coloumn, line := t.position.column, t.position.line
 			character := string(t.source[t.position.index])
-			log.Fatalf("ERROR: Unrecongnised token `%v` at line %v column %v\n", character, line, coloumn)
+			log.Fatalf("ERROR Unrecongnised token `%v` at line %v column %v\n", character, line, coloumn)
 		}
 	}
 
