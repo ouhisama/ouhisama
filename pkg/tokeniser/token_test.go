@@ -7,9 +7,7 @@ import (
 	"testing"
 )
 
-const test_token_length = 15
-
-var tokens = [test_token_length]Token{
+var tokens = []Token{
 	newToken(EOF, ""),
 	newToken(Newline, "\n"),
 	newToken(Indentation, "\t"),
@@ -28,7 +26,7 @@ var tokens = [test_token_length]Token{
 }
 
 func TestToken_Debug(t *testing.T) {
-	want := [test_token_length]string{
+	want := []string{
 		"EOF\n",
 		"Newline\n",
 		"Indentation\n",
@@ -62,7 +60,7 @@ func TestToken_Debug(t *testing.T) {
 }
 
 func Test_newToken(t *testing.T) {
-	want := [test_token_length]Token{
+	want := []Token{
 		{Kind: EOF, Value: ""},
 		{Kind: Newline, Value: "\n"},
 		{Kind: Indentation, Value: "\t"},
