@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func Test_Tokeniser(t *testing.T) {
+func Test_newTokeniser(t *testing.T) {
 	source := `(10 + 20) * 30`
 	tokens := Tokenise(source)
 	want := []string{
