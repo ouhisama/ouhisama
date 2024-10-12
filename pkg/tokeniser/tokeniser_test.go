@@ -8,20 +8,41 @@ import (
 )
 
 func Test_Tokeniser(t *testing.T) {
-	source := `(10 + 20) * 30`
+	source := "(-16 * 5 / (-0.8)) - 121 # 4 - 22 % 7\n"
 	tokens := Tokenise(source)
 	want := []string{
 		"LBracket",
-		"Number: \"10\"",
-		"Whitespace",
-		"Plus",
-		"Whitespace",
-		"Number: \"20\"",
-		"RBracket",
+		"Hyphen",
+		"Number: \"16\"",
 		"Whitespace",
 		"Star",
 		"Whitespace",
-		"Number: \"30\"",
+		"Number: \"5\"",
+		"Whitespace",
+		"Slash",
+		"Whitespace",
+		"LBracket",
+		"Hyphen",
+		"Number: \"0.8\"",
+		"RBracket",
+		"RBracket",
+		"Whitespace",
+		"Hyphen",
+		"Whitespace",
+		"Number: \"121\"",
+		"Whitespace",
+		"Hashtag",
+		"Whitespace",
+		"Number: \"4\"",
+		"Whitespace",
+		"Hyphen",
+		"Whitespace",
+		"Number: \"22\"",
+		"Whitespace",
+		"Percent",
+		"Whitespace",
+		"Number: \"7\"",
+		"Newline",
 		"EOF",
 	}
 	for i, token := range tokens {
