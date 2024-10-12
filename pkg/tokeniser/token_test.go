@@ -21,6 +21,7 @@ var tokens = []Token{
 	newToken(Star, "*"),
 	newToken(Slash, "/"),
 	newToken(Percent, "%"),
+	newToken(Hashtag, "#"),
 	newToken(LBracket, "("),
 	newToken(RBracket, ")"),
 }
@@ -40,6 +41,7 @@ func TestToken_Debug(t *testing.T) {
 		"Star",
 		"Slash",
 		"Percent",
+		"Hashtag",
 		"LBracket",
 		"RBracket",
 	}
@@ -73,6 +75,7 @@ func Test_newToken(t *testing.T) {
 		{Kind: Star, Value: "*"},
 		{Kind: Slash, Value: "/"},
 		{Kind: Percent, Value: "%"},
+		{Kind: Hashtag, Value: "#"},
 		{Kind: LBracket, Value: "("},
 		{Kind: RBracket, Value: ")"},
 	}

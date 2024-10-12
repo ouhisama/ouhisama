@@ -24,6 +24,7 @@ const (
 	Star
 	Slash
 	Percent
+	Hashtag
 
 	LBracket
 	RBracket
@@ -57,6 +58,8 @@ func (k TokenKind) string() string {
 		return "Slash"
 	case Percent:
 		return "Percent"
+	case Hashtag:
+		return "Hashtag"
 	case LBracket:
 		return "LBracket"
 	case RBracket:

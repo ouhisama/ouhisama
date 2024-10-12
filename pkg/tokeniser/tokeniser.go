@@ -104,6 +104,7 @@ func newTokeniser(source string) *tokeniser {
 			{regexp.MustCompile(`\*`), defaultHandler(Star, "*")},
 			{regexp.MustCompile(`\/`), defaultHandler(Slash, "/")},
 			{regexp.MustCompile(`\%`), defaultHandler(Percent, "%")},
+			{regexp.MustCompile(`\#`), defaultHandler(Hashtag, "#")},
 			{regexp.MustCompile(`\(`), defaultHandler(LBracket, "(")},
 			{regexp.MustCompile(`\)`), defaultHandler(RBracket, ")")},
 		},
