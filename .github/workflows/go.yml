@@ -27,27 +27,29 @@ jobs:
             GOOS=${os_arch[0]}
             GOARCH=${os_arch[1]}
 
-          EXT=""
-          if [ "$GOOS" == "windows" ]; then EXT=".exe"; fi
-          OUTPUT="ouhisama-$GOOS-$GOARCH$EXT"
+            EXT=""
+            if [ "$GOOS" == "windows" ]; then EXT=".exe"; fi
+            OUTPUT="ouhisama-$GOOS-$GOARCH$EXT"
         
-          echo "Building for $GOOS/$GOARCH"
-          GOOS=$GOOS GOARCH=$GOARCH go build -o bin/$OUTPUT cmd/ouhisama/ouhisama.go
+            echo "Building for $GOOS/$GOARCH"
+            GOOS=$GOOS GOARCH=$GOARCH go build -o bin/$OUTPUT cmd/ouhisama/ouhisama.go
         
-          if [ $? -ne 0 ]; then
-            echo "Error occurred during building for $GOOS/$GOARCH"
-            exit 1
-          fi
+            if [ $? -ne 0 ]; then
+              echo "Error occurred during building for $GOOS/$GOARCH"
+              exit 1
+            fi
+
+            echo "Complete building for all the platforms"
           done
       - name: Check if there are any changes to commit
         id: check
         run: |
-          if git diff --quiet; then
-            echo "No changes to commit"
-            echo "::set-output name=changes::false"
-          else
-            echo "Changes detected"
+          if [ -n "$(ls -A bin)" ]; then
+            echo "Changes detected in the bin directory"
             echo "::set-output name=changes::true"
+          else
+            echo "No changes in the bin directory to commit"
+            echo "::set-output name=changes::false"
           fi
       - name: Save the built Ouhi-sama programs
         if: steps.check.outputs.changes == 'true'
