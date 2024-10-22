@@ -27,7 +27,6 @@ func main() {
 
 	tokens := tokeniser.Tokenise(string(source))
 	for _, token := range tokens {
-		token.Debug()
-		fmt.Println()
+		fmt.Println(token.Debug())
 	}
 }

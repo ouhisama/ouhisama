@@ -2,6 +2,7 @@ package tokeniser
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"testing"
@@ -50,7 +51,7 @@ func TestToken_Debug(t *testing.T) {
 		var buffer bytes.Buffer
 		read, write, _ := os.Pipe()
 		os.Stdout = write
-		token.Debug()
+		fmt.Print(token.Debug())
 		write.Close()
 		os.Stdout = stdout
 		io.Copy(&buffer, read)

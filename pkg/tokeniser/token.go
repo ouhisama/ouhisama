@@ -80,11 +80,11 @@ func (t Token) isOneOf(kinds ...TokenKind) bool {
 	return slices.Contains(kinds, t.Kind)
 }
 
-func (t Token) Debug() {
+func (t Token) Debug() string {
 	if t.isOneOf(Identifier, Number, String) {
-		fmt.Printf("%v: \"%v\"", t.Kind.string(), t.Value)
+		return fmt.Sprintf("%v: \"%v\"", t.Kind.string(), t.Value)
 	} else {
-		fmt.Printf("%v", t.Kind.string())
+		return fmt.Sprintf("%v", t.Kind.string())
 	}
 }
 
