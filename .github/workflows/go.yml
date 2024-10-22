@@ -32,7 +32,7 @@ jobs:
           OUTPUT="ouhisama-$GOOS-$GOARCH$EXT"
         
           echo "Building for $GOOS/$GOARCH"
-          GOOS=$GOOS GOARCH=$GOARCH go build -o bin/$OUTPUT .
+          GOOS=$GOOS GOARCH=$GOARCH go build -o bin/$OUTPUT cmd/ouhisama/ouhisama.go
         
           if [ $? -ne 0 ]; then
             echo "Error occurred during building for $GOOS/$GOARCH"
