@@ -10,6 +10,4 @@ Hopefully we won't get too many todos and they won't get forgotten. If you've go
 
 - [x] Replace `Printf` with `Sprintf` in the token debugging function in `pkg/tokeniser/token.go` and all other related stuff. (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-10-11; completed by [@uynilo9](https://github.com/uynilo9) on 24-10-22)
 
-- [x] Add a workflow for building the Ouhi-sama program (`cmd/ouhisama/ouhisama.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-10-11; completed by [@uynilo9](https://github.com/uynilo9) on 24-10-22)
-
-- [ ] Check whether or not the untested built programs (`bin/ouhisama...`) are really working. (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-10-22)
+- [ ] Add a workflow for building the Ouhi-sama program (`cmd/ouhisama/ouhisama.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-10-11)
