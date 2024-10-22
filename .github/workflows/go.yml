@@ -12,14 +12,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        os: [windows, linux, darwin]
+        arch: [amd64, arm64]
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup Go environment
         uses: actions/setup-go@v5
         with:
           go-version: '1.23.1'
-      - name: Build the Ouhi-sama program
-        run: go build -v -o bin/ouhisama cmd/ouhisama/ouhisama.go
+      - name: Build for Ouhissama (${{ matrix.os }} ${{ matrix.arch }})
+        run: |
+          mkdir -p bin
+
+          EXT=""
+          if [ "${{ matrix.os }}" == "windows" ]; then EXT=".exe"; fi
+          OUTPUT="ouhisama-${{ matrix.os }}-${{ matrix.arch }}${EXT}"
+
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o bin/$OUTPUT cmd/ouhisama/ouhisama.go
       - name: Check for changes
         id: check
         run: |
@@ -30,7 +42,7 @@ jobs:
             echo "Changes detected"
             echo "::set-output name=changes::true"
           fi
-      - name: Save the Ouhi-sama program
+      - name: Save the built Ouhi-sama programs
         if: steps.check.outputs.changes == 'true'
         run : |
             git config --local user.name "GitHub Actions"
