@@ -1,4 +1,4 @@
-package tokeniser
+package token
 
 import (
 	"fmt"
@@ -88,7 +88,7 @@ func (t Token) Debug() string {
 	}
 }
 
-func newToken(kind TokenKind, value TokenValue) Token {
+func New(kind TokenKind, value TokenValue) Token {
 	return Token{
 		Kind:  kind,
 		Value: value,

@@ -1,4 +1,4 @@
-package tokeniser
+package token
 
 import (
 	"bytes"
@@ -9,22 +9,22 @@ import (
 )
 
 var tokens = []Token{
-	newToken(EOF, ""),
-	newToken(Newline, "\n"),
-	newToken(Indentation, "\t"),
-	newToken(Whitespace, " "),
-	newToken(Identifier, "uynilo9"),
-	newToken(Number, "213"),
-	newToken(String, "hello world"),
-	newToken(Equal, "="),
-	newToken(Plus, "+"),
-	newToken(Hyphen, "-"),
-	newToken(Star, "*"),
-	newToken(Slash, "/"),
-	newToken(Percent, "%"),
-	newToken(Hashtag, "#"),
-	newToken(LBracket, "("),
-	newToken(RBracket, ")"),
+	New(EOF, ""),
+	New(Newline, "\n"),
+	New(Indentation, "\t"),
+	New(Whitespace, " "),
+	New(Identifier, "uynilo9"),
+	New(Number, "213"),
+	New(String, "hello world"),
+	New(Equal, "="),
+	New(Plus, "+"),
+	New(Hyphen, "-"),
+	New(Star, "*"),
+	New(Slash, "/"),
+	New(Percent, "%"),
+	New(Hashtag, "#"),
+	New(LBracket, "("),
+	New(RBracket, ")"),
 }
 
 func TestToken_Debug(t *testing.T) {
@@ -61,7 +61,7 @@ func TestToken_Debug(t *testing.T) {
 	}
 }
 
-func Test_newToken(t *testing.T) {
+func Test_New(t *testing.T) {
 	want := []Token{
 		{Kind: EOF, Value: ""},
 		{Kind: Newline, Value: "\n"},

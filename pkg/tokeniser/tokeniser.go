@@ -4,6 +4,8 @@ import (
 	"log"
 	"regexp"
 	"strconv"
+
+	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
 type handler func(tokeniser *tokeniser, regex *regexp.Regexp)
@@ -20,7 +22,7 @@ type position struct {
 }
 
 type tokeniser struct {
-	Tokens   []Token
+	Tokens   []token.Token
 	patterns []pattern
 	source   string
 	position position
@@ -30,7 +32,7 @@ func (t *tokeniser) at(n uint) byte {
 	return t.source[t.position.index+n]
 }
 
-func (t *tokeniser) push(token Token) {
+func (t *tokeniser) push(token token.Token) {
 	t.Tokens = append(t.Tokens, token)
 }
 
@@ -57,40 +59,40 @@ func (t *tokeniser) advanceColumn(length uint) {
 	t.advanceIndex(length)
 }
 
-func defaultHandler(kind TokenKind, value TokenValue) handler {
+func defaultHandler(kind token.TokenKind, value token.TokenValue) handler {
 	return func(t *tokeniser, regex *regexp.Regexp) {
 		t.advanceColumn(uint(len(value)))
-		t.push(newToken(kind, value))
+		t.push(token.New(kind, value))
 	}
 }
 
 func newlineHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(newToken(Newline, TokenValue(strconv.Itoa(len(matched)))))
+	t.push(token.New(token.Newline, token.TokenValue(strconv.Itoa(len(matched)))))
 	t.advanceLine(uint(len(matched)))
 }
 
 func indentationHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(newToken(Indentation, TokenValue(strconv.Itoa(len(matched)/4))))
+	t.push(token.New(token.Indentation, token.TokenValue(strconv.Itoa(len(matched)/4))))
 	t.advanceColumn(uint(len(matched)))
 }
 
 func whitespaceHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(newToken(Whitespace, TokenValue(strconv.Itoa(len(matched)))))
+	t.push(token.New(token.Whitespace, token.TokenValue(strconv.Itoa(len(matched)))))
 	t.advanceColumn(uint(len(matched)))
 }
 
 func numberHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(newToken(Number, TokenValue(matched)))
+	t.push(token.New(token.Number, token.TokenValue(matched)))
 	t.advanceColumn(uint(len(matched)))
 }
 
 func newTokeniser(source string) *tokeniser {
 	return &tokeniser{
-		Tokens: []Token{},
+		Tokens: []token.Token{},
 		patterns: []pattern{
 			{regexp.MustCompile(`\n`), newlineHandler},
 			{regexp.MustCompile(`\t+`), indentationHandler},
@@ -98,15 +100,15 @@ func newTokeniser(source string) *tokeniser {
 
 			{regexp.MustCompile(`-?[0-9]+(\.[0-9]+)?`), numberHandler},
 
-			{regexp.MustCompile(`=`), defaultHandler(Equal, "=")},
-			{regexp.MustCompile(`\+`), defaultHandler(Plus, "+")},
-			{regexp.MustCompile(`\-`), defaultHandler(Hyphen, "-")},
-			{regexp.MustCompile(`\*`), defaultHandler(Star, "*")},
-			{regexp.MustCompile(`\/`), defaultHandler(Slash, "/")},
-			{regexp.MustCompile(`\%`), defaultHandler(Percent, "%")},
-			{regexp.MustCompile(`\#`), defaultHandler(Hashtag, "#")},
-			{regexp.MustCompile(`\(`), defaultHandler(LBracket, "(")},
-			{regexp.MustCompile(`\)`), defaultHandler(RBracket, ")")},
+			{regexp.MustCompile(`=`), defaultHandler(token.Equal, "=")},
+			{regexp.MustCompile(`\+`), defaultHandler(token.Plus, "+")},
+			{regexp.MustCompile(`\-`), defaultHandler(token.Hyphen, "-")},
+			{regexp.MustCompile(`\*`), defaultHandler(token.Star, "*")},
+			{regexp.MustCompile(`\/`), defaultHandler(token.Slash, "/")},
+			{regexp.MustCompile(`\%`), defaultHandler(token.Percent, "%")},
+			{regexp.MustCompile(`\#`), defaultHandler(token.Hashtag, "#")},
+			{regexp.MustCompile(`\(`), defaultHandler(token.LBracket, "(")},
+			{regexp.MustCompile(`\)`), defaultHandler(token.RBracket, ")")},
 		},
 		source: source,
 		position: position{
@@ -117,7 +119,7 @@ func newTokeniser(source string) *tokeniser {
 	}
 }
 
-func Tokenise(source string) []Token {
+func Tokenise(source string) []token.Token {
 	t := newTokeniser(source)
 
 	for !t.isEOF() {
@@ -140,6 +142,6 @@ func Tokenise(source string) []Token {
 		}
 	}
 
-	t.push(newToken(EOF, ""))
+	t.push(token.New(token.EOF, ""))
 	return t.Tokens
 }
