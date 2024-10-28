@@ -28,10 +28,6 @@ type tokeniser struct {
 	position position
 }
 
-func (t *tokeniser) at(n uint) byte {
-	return t.source[t.position.index+n]
-}
-
 func (t *tokeniser) push(token token.Token) {
 	t.Tokens = append(t.Tokens, token)
 }
