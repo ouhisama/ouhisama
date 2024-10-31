@@ -30,7 +30,7 @@ const (
 	RBracket
 )
 
-func (k TokenKind) string() string {
+func (k TokenKind) String() string {
 	switch k {
 	case EOF:
 		return "EOF"
@@ -82,9 +82,9 @@ func (t Token) isOneOf(kinds ...TokenKind) bool {
 
 func (t Token) Debug() string {
 	if t.isOneOf(Identifier, Number, String) {
-		return fmt.Sprintf("%v: \"%v\"", t.Kind.string(), t.Value)
+		return fmt.Sprintf("%v: \"%v\"", t.Kind.String(), t.Value)
 	} else {
-		return fmt.Sprintf("%v", t.Kind.string())
+		return fmt.Sprintf("%v", t.Kind.String())
 	}
 }
 

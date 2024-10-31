@@ -82,7 +82,7 @@ func Test_New(t *testing.T) {
 	}
 	for i, token := range tokens {
 		if token != want[i] {
-			t.Fatalf("ERROR Expected `%v: \"%v\"`, but got `%v \"%v\"`", want[i].Kind.string(), want[i].Value, token.Kind.string(), token.Value)
+			t.Fatalf("ERROR Expected `%v: \"%v\"`, but got `%v \"%v\"`", want[i].Kind.String(), want[i].Value, token.Kind.String(), token.Value)
 		}
 	}
 }
