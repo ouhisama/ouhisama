@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 
+	"github.com/ouhisama/ouhisama/pkg/parser"
 	"github.com/ouhisama/ouhisama/pkg/tokeniser"
+	"github.com/sanity-io/litter"
 )
 
 func main() {
@@ -26,7 +27,6 @@ func main() {
 	}
 
 	tokens := tokeniser.Tokenise(string(source))
-	for _, token := range tokens {
-		fmt.Println(token.Debug())
-	}
+	ast := parser.Parse(tokens)
+	litter.Dump(ast)
 }

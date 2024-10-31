@@ -9,8 +9,8 @@ type NumberExpression struct {
 func (_ NumberExpression) expression() {}
 
 type BinaryExpression struct {
-	Left     Expression
 	Operator token.Token
+	Left     Expression
 	Right    Expression
 }
 

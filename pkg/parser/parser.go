@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"log"
+
 	"github.com/ouhisama/ouhisama/pkg/ast"
 	"github.com/ouhisama/ouhisama/pkg/token"
 )
@@ -20,11 +22,19 @@ func (p *parser) eat() token.Token {
 	return t
 }
 
+func (p *parser) want(kind token.TokenKind) token.Token {
+	if p.at().Kind != kind {
+		log.Fatalf("ERROR Expected the token kind `%v`, but got `%v` instead\n", kind.String(), p.at().Kind.String())
+	}
+	return p.eat()
+}
+
 func (p *parser) isEOF() bool {
 	return p.position >= uint(len(p.tokens)) && p.at().Kind == token.EOF
 }
 
 func newParser(tokens []token.Token) *parser {
+	newTokenLookupTables()
 	return &parser{
 		tokens:   tokens,
 		position: 0,
