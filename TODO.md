@@ -16,4 +16,4 @@ Hopefully we won't get too many todos and they won't get forgotten. If you've go
 
 - [x] Remove the useless parameter `bp` in the function `nullDenotation` (`pkg/parser/expressions.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-11-1; completed by [@uynilo9](https://github.com/uynilo9) on 24-11-2)
 
-- [ ] Get the project a better error handling system. (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-11-2)
+- [ ] Get the project a better error handling system which contains position info and etc. (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-11-2)
