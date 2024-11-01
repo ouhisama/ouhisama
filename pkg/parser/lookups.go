@@ -51,8 +51,8 @@ func leftDenotation(kind token.TokenKind, bp bindingPower, led leftDenotationHan
 	leftDenotationLookupTable[kind] = led
 }
 
-func nullDenotation(kind token.TokenKind, bp bindingPower, nud nullDenotationHandler) {
-	bindingPowerLookupTable[kind] = bp
+func nullDenotation(kind token.TokenKind, nud nullDenotationHandler) {
+	bindingPowerLookupTable[kind] = primary
 	nullDenotationLookupTable[kind] = nud
 }
 
@@ -65,5 +65,5 @@ func newTokenLookupTables() {
 	leftDenotation(token.Percent, multiplicative, parseBinaryExpression)
 	leftDenotation(token.Hashtag, multiplicative, parseBinaryExpression)
 
-	nullDenotation(token.Number, primary, parsePrimaryExpression)
+	nullDenotation(token.Number, parsePrimaryExpression)
 }
