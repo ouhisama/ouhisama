@@ -30,7 +30,7 @@ func (p *parser) want(kind token.TokenKind) token.Token {
 }
 
 func (p *parser) isEOF() bool {
-	return p.position >= uint(len(p.tokens)) && p.at().Kind == token.EOF
+	return p.at().Kind == token.EOF
 }
 
 func newParser(tokens []token.Token) *parser {
