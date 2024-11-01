@@ -41,29 +41,29 @@ var (
 	bindingPowerLookupTable   = bindingPowerLookup{}
 )
 
-func statement(kind token.TokenKind, bp bindingPower, stmt statementHandler) {
+func newStatement(kind token.TokenKind, bp bindingPower, stmt statementHandler) {
 	bindingPowerLookupTable[kind] = bp
 	statementLookupTable[kind] = stmt
 }
 
-func leftDenotation(kind token.TokenKind, bp bindingPower, led leftDenotationHandler) {
+func newLeftDenotation(kind token.TokenKind, bp bindingPower, led leftDenotationHandler) {
 	bindingPowerLookupTable[kind] = bp
 	leftDenotationLookupTable[kind] = led
 }
 
-func nullDenotation(kind token.TokenKind, nud nullDenotationHandler) {
+func newNullDenotation(kind token.TokenKind, nud nullDenotationHandler) {
 	bindingPowerLookupTable[kind] = primary
 	nullDenotationLookupTable[kind] = nud
 }
 
 func newTokenLookupTables() {
-	leftDenotation(token.Plus, additive, parseBinaryExpression)
-	leftDenotation(token.Hyphen, additive, parseBinaryExpression)
+	newLeftDenotation(token.Plus, additive, parseBinaryExpression)
+	newLeftDenotation(token.Hyphen, additive, parseBinaryExpression)
 
-	leftDenotation(token.Star, multiplicative, parseBinaryExpression)
-	leftDenotation(token.Slash, multiplicative, parseBinaryExpression)
-	leftDenotation(token.Percent, multiplicative, parseBinaryExpression)
-	leftDenotation(token.Hashtag, multiplicative, parseBinaryExpression)
+	newLeftDenotation(token.Star, multiplicative, parseBinaryExpression)
+	newLeftDenotation(token.Slash, multiplicative, parseBinaryExpression)
+	newLeftDenotation(token.Percent, multiplicative, parseBinaryExpression)
+	newLeftDenotation(token.Hashtag, multiplicative, parseBinaryExpression)
 
-	nullDenotation(token.Number, parsePrimaryExpression)
+	newNullDenotation(token.Number, parsePrimaryExpression)
 }
