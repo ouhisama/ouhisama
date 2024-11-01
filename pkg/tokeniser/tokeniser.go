@@ -94,7 +94,7 @@ func newTokeniser(source string) *tokeniser {
 			{regexp.MustCompile(`\t+`), indentationHandler},
 			{regexp.MustCompile(`\s+`), whitespaceHandler},
 
-			{regexp.MustCompile(`-?[0-9]+(\.[0-9]+)?`), numberHandler},
+			{regexp.MustCompile(`[0-9]+(\.[0-9]+)?`), numberHandler},
 
 			{regexp.MustCompile(`=`), defaultHandler(token.Equal, "=")},
 			{regexp.MustCompile(`\+`), defaultHandler(token.Plus, "+")},
