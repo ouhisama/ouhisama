@@ -12,6 +12,6 @@ Hopefully we won't get too many todos and they won't get forgotten. If you've go
 
 - [ ] Add a workflow for building the Ouhi-sama program (`cmd/ouhisama/ouhisama.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-10-11)
 
-- [ ] Correct the misused binding power argument in the function `ledHandler` under `parseExpression` (`pkg/parser/expressions.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-11-1)
+- [x] Correct the misused binding power argument in the function `ledHandler` under `parseExpression` (`pkg/parser/expressions.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-11-1; completed by [@uynilo9](https://github.com/uynilo9) on 24-11-2)
 
 - [ ] Remove the useless parameter `bp` in the function `nullDenotation` (`pkg/parser/expressions.go`). (Proposed by [@uynilo9](https://github.com/uynilo9) on 24-11-1)

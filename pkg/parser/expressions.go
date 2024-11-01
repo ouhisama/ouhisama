@@ -51,7 +51,7 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 		if !found {
 			log.Fatalf("ERROR No left denotation handler for the token `%v` (having the type `%v`) in the parser\n", t.Value, t.Kind.String())
 		}
-		left = ledHandler(p, bp, left)
+		left = ledHandler(p, bindingPowerLookupTable[p.at().Kind], left)
 	}
 
 	return left
