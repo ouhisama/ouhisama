@@ -3,9 +3,9 @@ package tokeniser
 import (
 	"log"
 	"regexp"
-	"strconv"
 
 	"github.com/ouhisama/ouhisama/pkg/token"
+	colour "github.com/fatih/color"
 )
 
 type handler func(tokeniser *tokeniser, regex *regexp.Regexp)
@@ -19,6 +19,10 @@ type position struct {
 	index  uint
 	column uint
 	line   uint
+}
+
+func (p position) value() (uint, uint, uint) {
+	return p.index, p.column, p.line
 }
 
 type tokeniser struct {
@@ -55,34 +59,39 @@ func (t *tokeniser) advanceColumn(length uint) {
 	t.advanceIndex(length)
 }
 
-func defaultHandler(kind token.TokenKind, value token.TokenValue) handler {
+func defaultHandler(kind token.TokenKind, value string) handler {
 	return func(t *tokeniser, regex *regexp.Regexp) {
+		index, column, line := t.position.value()
 		t.advanceColumn(uint(len(value)))
-		t.push(token.New(kind, value))
+		t.push(token.NewToken(kind, value, token.NewTokenPosition(index, column, line), uint(len(value))))
 	}
 }
 
 func newlineHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(token.New(token.Newline, token.TokenValue(strconv.Itoa(len(matched)))))
+	index, column, line := t.position.value()
+	t.push(token.NewToken(token.Newline, token.Newline.String(), token.NewTokenPosition(index, column, line), uint(len(matched))))
 	t.advanceLine(uint(len(matched)))
 }
 
 func indentationHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(token.New(token.Indentation, token.TokenValue(strconv.Itoa(len(matched)/4))))
+	index, column, line := t.position.value()
+	t.push(token.NewToken(token.Indentation, token.Indentation.String(), token.NewTokenPosition(index, column, line), uint(len(matched))))
 	t.advanceColumn(uint(len(matched)))
 }
 
 func whitespaceHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(token.New(token.Whitespace, token.TokenValue(strconv.Itoa(len(matched)))))
+	index, column, line := t.position.value()
+	t.push(token.NewToken(token.Whitespace, token.Whitespace.String(), token.NewTokenPosition(index, column, line), uint(len(matched))))
 	t.advanceColumn(uint(len(matched)))
 }
 
 func numberHandler(t *tokeniser, regex *regexp.Regexp) {
 	matched := regex.FindString(t.remainder())
-	t.push(token.New(token.Number, token.TokenValue(matched)))
+	index, column, line := t.position.value()
+	t.push(token.NewToken(token.Number, string(matched), token.NewTokenPosition(index, column, line), uint(len(matched))))
 	t.advanceColumn(uint(len(matched)))
 }
 
@@ -134,10 +143,11 @@ func Tokenise(source string) []token.Token {
 		if !matched {
 			coloumn, line := t.position.column, t.position.line
 			character := string(t.source[t.position.index])
-			log.Fatalf("ERROR Unrecongnised token `%v` at line %v column %v\n", character, line, coloumn)
+			log.Fatalf("ERROR Unrecongnised token `%v`\n\n%v\t| %v%v\n\n", character, line, t.source[t.position.index+1-coloumn:t.position.index], colour.RedString(character))
 		}
 	}
 
-	t.push(token.New(token.EOF, ""))
+	index, column, line := t.position.value()
+	t.push(token.NewToken(token.EOF, token.EOF.String(), token.NewTokenPosition(index, column, line), 1))
 	return t.Tokens
 }

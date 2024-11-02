@@ -69,11 +69,17 @@ func (k TokenKind) String() string {
 	}
 }
 
-type TokenValue string
+type TokenPosition struct {
+	Index  uint
+	Column uint
+	Line   uint
+}
 
 type Token struct {
-	Kind  TokenKind
-	Value TokenValue
+	Kind     TokenKind
+	Value    string
+	Position TokenPosition
+	Length   uint
 }
 
 func (t Token) isOneOf(kinds ...TokenKind) bool {
@@ -82,15 +88,25 @@ func (t Token) isOneOf(kinds ...TokenKind) bool {
 
 func (t Token) Debug() string {
 	if t.isOneOf(Identifier, Number, String) {
-		return fmt.Sprintf("%v: \"%v\"", t.Kind.String(), t.Value)
+		return fmt.Sprintf("\nKind: %v,\nValue: \"%v\",\nPosition:\n\tIndex: %v,\n\tColumn: %v,\n\tLine: %v\nLength: %v\n", t.Kind.String(), t.Value, t.Position.Index, t.Position.Column, t.Position.Line, t.Length)
 	} else {
-		return fmt.Sprintf("%v", t.Kind.String())
+		return fmt.Sprintf("\nKind: %v,\nValue: \"%v\",\nPosition:\n\tIndex: %v,\n\tColumn: %v,\n\tLine: %v\nLength: %v\n", t.Kind.String(), "", t.Position.Index, t.Position.Column, t.Position.Line, t.Length)
 	}
 }
 
-func New(kind TokenKind, value TokenValue) Token {
+func NewToken(kind TokenKind, value string, position TokenPosition, length uint) Token {
 	return Token{
-		Kind:  kind,
-		Value: value,
+		Kind:     kind,
+		Value:    value,
+		Position: position,
+		Length:   length,
+	}
+}
+
+func NewTokenPosition(index uint, column uint, line uint) TokenPosition {
+	return TokenPosition{
+		Index:  index,
+		Column: column,
+		Line:   line,
 	}
 }
