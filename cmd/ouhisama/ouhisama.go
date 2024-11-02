@@ -1,14 +1,14 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
 	"log"
 	"os"
 	"path/filepath"
 
-	// "github.com/ouhisama/ouhisama/pkg/parser"
+	"github.com/ouhisama/ouhisama/pkg/parser"
 	"github.com/ouhisama/ouhisama/pkg/tokeniser"
-	// "github.com/sanity-io/litter"
+	"github.com/sanity-io/litter"
 )
 
 func main() {
@@ -27,10 +27,10 @@ func main() {
 		log.Fatalf("ERROR Failed to read file `%v`\n", path)
 	}
 
-	tokens := tokeniser.Tokenise(string(source))
-	for _, token := range tokens {
-		fmt.Println(token.Debug())
-	}
-	// ast := parser.Parse(tokens)
-	// litter.Dump(ast)
+	tokens := tokeniser.Tokenise(path, string(source))
+	// for _, token := range tokens {
+	// 	fmt.Println(token.Debug())
+	// }
+	ast := parser.Parse(path, tokens)
+	litter.Dump(ast)
 }

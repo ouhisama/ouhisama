@@ -1,11 +1,12 @@
 package tokeniser
 
 import (
-	"log"
+	"fmt"
+	"os"
 	"regexp"
 
+	"github.com/ouhisama/ouhisama/pkg/logger"
 	"github.com/ouhisama/ouhisama/pkg/token"
-	colour "github.com/fatih/color"
 )
 
 type handler func(tokeniser *tokeniser, regex *regexp.Regexp)
@@ -28,6 +29,7 @@ func (p position) value() (uint, uint, uint) {
 type tokeniser struct {
 	Tokens   []token.Token
 	patterns []pattern
+	file     string
 	source   string
 	position position
 }
@@ -95,7 +97,7 @@ func numberHandler(t *tokeniser, regex *regexp.Regexp) {
 	t.advanceColumn(uint(len(matched)))
 }
 
-func newTokeniser(source string) *tokeniser {
+func newTokeniser(file string, source string) *tokeniser {
 	return &tokeniser{
 		Tokens: []token.Token{},
 		patterns: []pattern{
@@ -115,6 +117,7 @@ func newTokeniser(source string) *tokeniser {
 			{regexp.MustCompile(`\(`), defaultHandler(token.LBracket, "(")},
 			{regexp.MustCompile(`\)`), defaultHandler(token.RBracket, ")")},
 		},
+		file:   file,
 		source: source,
 		position: position{
 			index:  0,
@@ -124,8 +127,8 @@ func newTokeniser(source string) *tokeniser {
 	}
 }
 
-func Tokenise(source string) []token.Token {
-	t := newTokeniser(source)
+func Tokenise(file string, source string) []token.Token {
+	t := newTokeniser(file, source)
 
 	for !t.isEOF() {
 		matched := false
@@ -143,7 +146,9 @@ func Tokenise(source string) []token.Token {
 		if !matched {
 			coloumn, line := t.position.column, t.position.line
 			character := string(t.source[t.position.index])
-			log.Fatalf("ERROR Unrecongnised token `%v`\n\n%v\t| %v%v\n\n", character, line, t.source[t.position.index+1-coloumn:t.position.index], colour.RedString(character))
+			err, code := logger.UnrecongnisedTokenError(file, t.source, character, t.position.index, line, coloumn)
+			fmt.Println(err)
+			os.Exit(int(code))
 		}
 	}
 

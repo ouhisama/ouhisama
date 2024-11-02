@@ -1,10 +1,12 @@
 package parser
 
 import (
-	"log"
+	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/ouhisama/ouhisama/pkg/ast"
+	"github.com/ouhisama/ouhisama/pkg/logger"
 	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
@@ -22,15 +24,17 @@ func parsePrimaryExpression(p *parser) ast.Expression {
 	switch p.at().Kind {
 	case token.Number:
 		t := p.eat()
-		value, err := strconv.ParseFloat(string(t.Value), 64)
-		if err != nil {
-			log.Fatalf("ERROR Failed to convert the value type of `%v` unexpectedly while creating a primary expression\n", t.Value)
-		}
+		value, _ := strconv.ParseFloat(string(t.Value), 64)
+		// if err != nil {
+		// 	log.Fatalf("ERROR Failed to convert the value type of `%v` unexpectedly while creating a primary expression\n", t.Value)
+		// }
 		return ast.NumberExpression{
 			Value: value,
 		}
 	default:
-		log.Fatalf("ERROR Unexpected token `%v` while creating a primary expression\n", p.at().Kind.String())
+		err, code := logger.UnexpectedTokenError(p.file, p.at())
+		fmt.Println(err)
+		os.Exit(int(code))
 		return nil
 	}
 }
@@ -39,7 +43,9 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 	t := p.at()
 	nudHandler, found := nullDenotationLookupTable[t.Kind]
 	if !found {
-		log.Fatalf("ERROR No null denotation handler for the token `%v` while parsing an expression\n", t.Value)
+		err, code := logger.NoNudHandlerError(p.file, t)
+		fmt.Println(err)
+		os.Exit(int(code))
 	}
 
 	left := nudHandler(p)
@@ -47,7 +53,9 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 		t := p.at()
 		ledHandler, found := leftDenotationLookupTable[t.Kind]
 		if !found {
-			log.Fatalf("ERROR No left denotation handler for the token `%v` while parsing an expression\n", t.Value)
+			err, code := logger.NoLedHandlerError(p.file, t)
+			fmt.Println(err)
+			os.Exit(int(code))
 		}
 		left = ledHandler(p, bindingPowerLookupTable[p.at().Kind], left)
 	}
