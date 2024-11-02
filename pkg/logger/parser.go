@@ -82,7 +82,7 @@ func NoNudHandlerError(file string, t token.Token) (string, ParserErrorCode) {
 
 	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], t.Value, source[index+t.Length:end])
 
-	advice := colour.Sprintf("%v^1%v you might put an incorrect thing ^Slike you^R^1 here", strings.Repeat(" ", int(column)-1), strings.Repeat("^", len(t.Value)))
+	advice := colour.Sprintf("%v^1%v you might put an incorrect stuff ^Slike you^R^1 here", strings.Repeat(" ", int(column)-1), strings.Repeat("^", len(t.Value)))
 
 	return colour.Sprintf("^1ERROR[%v]^7 No left denotation handler for the token `%v` while parsing an expression\n\n\t> %v\n\t|\n%v\t| %v\n\t| %v\n", err, t.Value, file, line, code, advice), NoNudHandler
 }
@@ -108,7 +108,7 @@ func NoLedHandlerError(file string, t token.Token) (string, ParserErrorCode) {
 
 	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], t.Value, source[index+t.Length:end])
 
-	advice := colour.Sprintf("%v^1%v you might put an incorrect thing ^Slike you^R^1 here", strings.Repeat(" ", int(column)-1), strings.Repeat("^", len(t.Value)))
+	advice := colour.Sprintf("%v^1%v you might put an incorrect stuff ^Slike you^R^1 here", strings.Repeat(" ", int(column)-1), strings.Repeat("^", len(t.Value)))
 
 	return colour.Sprintf("^1ERROR[%v]^7 No left denotation handler for the token `%v` while parsing an expression\n\n\t> %v\n\t|\n%v\t| %v\n\t| %v\n", err, t.Value, file, line, code, advice), NoLedHandler
 }
