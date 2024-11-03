@@ -5,12 +5,14 @@ import (
 	"strings"
 
 	"github.com/alecthomas/colour"
+	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
 type errorKind uint
 
 const (
 	notExpectedToken errorKind = iota + 1
+	notExpectedNewlineToken
 	unexpectedToken
 	cannotParseFloat
 	noNudHandler
@@ -47,7 +49,11 @@ func (p *parser) error(kind errorKind, msg string, advice string, detail string)
 	err := fmt.Sprintf("P%0*d", 3, kind)
 	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], unknown, rest)
 
-	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat(" ", int(column)-1), strings.Repeat("^", int(t.Length)), advice)
+	var indentations uint
+	if p.previous().Kind == token.Indentation {
+		indentations = p.previous().Length
+	}
+	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat("\t", int(indentations)), strings.Repeat("^", int(t.Length)), advice)
 
 	if detail != "" {
 		detail = "\n" + detail + "\n"

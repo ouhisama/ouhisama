@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/colour"
+	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
 type errorKind uint
@@ -34,7 +35,11 @@ func (t *tokeniser) error(kind errorKind, msg string, advice string, detail stri
 	err := fmt.Sprintf("T%0*d", 3, kind)
 	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], unknown, source[index+uint(len(unknown)):end])
 
-	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat(" ", int(column)-1), strings.Repeat("^", len(unknown)), advice)
+	var indentations uint
+	if t.previous().Kind == token.Indentation {
+		indentations = t.previous().Length
+	}
+	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat("\t", int(indentations)), strings.Repeat("^", len(unknown)), advice)
 
 	if detail != "" {
 		detail = "\n" + detail + "\n"
