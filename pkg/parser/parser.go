@@ -45,10 +45,10 @@ func (p *parser) previous() token.Token {
 
 func (p *parser) want(kind token.TokenKind) token.Token {
 	if p.at().Kind != kind {
-		switch kind {
+		switch p.at().Kind {
 		case token.Newline:
-			msg := "Unexpected newline"
-			advice := "remove the newline"
+			msg := "Got an unexpected newline token"
+			advice := "delete the newline here"
 			p.error(notExpectedToken, msg, advice, "")
 			os.Exit(1)
 		default:
