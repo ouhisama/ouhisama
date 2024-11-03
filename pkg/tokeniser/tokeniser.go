@@ -42,6 +42,10 @@ func (t *tokeniser) remainder() string {
 	return t.source[t.position.index:]
 }
 
+func (t *tokeniser) previous() token.Token {
+	return t.Tokens[len(t.Tokens)-1]
+}
+
 func (t *tokeniser) isEOF() bool {
 	return t.position.index >= uint(len(t.source))
 }

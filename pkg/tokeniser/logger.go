@@ -36,9 +36,12 @@ func (t *tokeniser) error(kind errorKind, msg string, advice string, detail stri
 	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], unknown, source[index+uint(len(unknown)):end])
 
 	var indentations uint
-	if t.previous().Kind == token.Indentation {
-		indentations = t.previous().Length
+	if t.position.index != 0 {
+		if t.previous().Kind == token.Indentation {
+			indentations = t.previous().Length
+		}
 	}
+
 	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat("\t", int(indentations)), strings.Repeat("^", len(unknown)), advice)
 
 	if detail != "" {

@@ -7,7 +7,8 @@ type BlockStatement struct {
 func (_ BlockStatement) statement() {}
 
 type ExpressionStatement struct {
-	Body Expression
+	Body  Expression
+	Level uint
 }
 
 func (_ ExpressionStatement) statement() {}

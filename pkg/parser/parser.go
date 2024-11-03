@@ -25,16 +25,38 @@ func (p *parser) eat() token.Token {
 	return t
 }
 
+func (p *parser) next() token.Token {
+	return p.tokens[p.position+1]
+}
+
 func (p *parser) advance() {
 	p.position++
 }
 
+func (p *parser) previous() token.Token {
+	if p.position != 0 {
+		return p.tokens[p.position-1]
+	} else {
+		// Program must't get here
+		os.Exit(1)
+		return token.Token{}
+	}
+}
+
 func (p *parser) want(kind token.TokenKind) token.Token {
 	if p.at().Kind != kind {
-		msg := fmt.Sprintf("Expected a `%v`, but got a `%v` instead", kind.String(), p.at().Kind.String())
-		advice := fmt.Sprintf("this's supposed to be a `%v`", kind.String())
-		p.error(notExpectedToken, msg, advice, "")
-		os.Exit(1)
+		switch kind {
+		case token.Newline:
+			msg := "Unexpected newline"
+			advice := "remove the newline"
+			p.error(notExpectedToken, msg, advice, "")
+			os.Exit(1)
+		default:
+			msg := fmt.Sprintf("Expected a `%v`, instead of `%v`", kind.String(), p.at().Kind.String())
+			advice := fmt.Sprintf("this's supposed to be a `%v`", kind.String())
+			p.error(notExpectedToken, msg, advice, "")
+			os.Exit(1)
+		}
 	}
 	return p.eat()
 }

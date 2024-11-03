@@ -41,8 +41,8 @@ var (
 	bindingPowerLookupTable   = bindingPowerLookup{}
 )
 
-func newStatement(kind token.TokenKind, bp bindingPower, stmt statementHandler) {
-	bindingPowerLookupTable[kind] = bp
+func newStatement(kind token.TokenKind, stmt statementHandler) {
+	bindingPowerLookupTable[kind] = zero
 	statementLookupTable[kind] = stmt
 }
 
@@ -57,6 +57,8 @@ func newNullDenotation(kind token.TokenKind, nud nullDenotationHandler) {
 }
 
 func newTokenLookupTables() {
+	newStatement(token.Newline, parseStatement)
+
 	newLeftDenotation(token.Plus, additive, parseBinaryExpression)
 	newLeftDenotation(token.Hyphen, additive, parseBinaryExpression)
 

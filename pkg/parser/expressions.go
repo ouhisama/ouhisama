@@ -26,9 +26,11 @@ func parsePrimaryExpression(p *parser) ast.Expression {
 		t := p.at()
 		value, err := strconv.ParseFloat(string(t.Value), 64)
 		if err != nil {
-			msg := fmt.Sprintf("Failed to convert the type of `%v` unexpectedly while parsing a primary expression", t.Value)
-			advice := "We don't know why it couldn't be parsed to a float"
-			p.error(cannotParseFloat, msg, advice, err.Error())
+			// Program must't get here
+
+			// msg := fmt.Sprintf("Failed to convert the type of `%v` unexpectedly while parsing a primary expression", t.Value)
+			// advice := "We don't know why it couldn't be parsed to a float"
+			// p.error(cannotParseFloat, msg, advice, err.Error())
 			os.Exit(1)
 		}
 		p.advance()
@@ -36,9 +38,7 @@ func parsePrimaryExpression(p *parser) ast.Expression {
 			Value: value,
 		}
 	default:
-		msg := fmt.Sprintf("Got an unexpected token `%v` while parsing an expression", p.at().Value)
-		advice := "check your code syntax or just remove this"
-		p.error(unexpectedToken, msg, advice, "")
+		// Program must't get here
 		os.Exit(1)
 		return nil
 	}
@@ -55,7 +55,7 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 	t := p.at()
 	nudHandler, found := nullDenotationLookupTable[t.Kind]
 	if !found {
-		msg := fmt.Sprintf("No null denotation handler for the token `%v` while parsing an expression", t.Value)
+		msg := fmt.Sprintf("No null denotation handler for the token `%v`", t.Value)
 		advice := colour.Sprintf("you might put an incorrect stuff ^Slike you^R^1 here")
 		p.error(noNudHandler, msg, advice, "")
 		os.Exit(1)
@@ -66,7 +66,7 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 		t := p.at()
 		ledHandler, found := leftDenotationLookupTable[t.Kind]
 		if !found {
-			msg := fmt.Sprintf("No left denotation handler for the token `%v` while parsing an expression", t.Value)
+			msg := fmt.Sprintf("No left denotation handler for the token `%v`", t.Value)
 			advice := colour.Sprintf("you might put an incorrect stuff ^Slike you^R^1 here")
 			p.error(noLedHandler, msg, advice, "")
 			os.Exit(1)
