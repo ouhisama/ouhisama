@@ -5,12 +5,12 @@ import (
 	"os"
 
 	"github.com/ouhisama/ouhisama/pkg/ast"
-	"github.com/ouhisama/ouhisama/pkg/logger"
 	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
 type parser struct {
 	file     string
+	source   string
 	tokens   []token.Token
 	position uint
 }
@@ -25,11 +25,16 @@ func (p *parser) eat() token.Token {
 	return t
 }
 
+func (p *parser) advance() {
+	p.position++
+}
+
 func (p *parser) want(kind token.TokenKind) token.Token {
 	if p.at().Kind != kind {
-		err, code := logger.NotExpectedTokenError(p.file, p.at(), kind)
-		fmt.Println(err)
-		os.Exit(int(code))
+		msg := fmt.Sprintf("Expected a `%v`, but got a `%v` instead", kind.String(), p.at().Kind.String())
+		advice := fmt.Sprintf("this's supposed to be a `%v`", kind.String())
+		p.error(notExpectedToken, msg, advice, "")
+		os.Exit(1)
 	}
 	return p.eat()
 }
@@ -38,17 +43,18 @@ func (p *parser) isEOF() bool {
 	return p.at().Kind == token.EOF
 }
 
-func newParser(file string, tokens []token.Token) *parser {
+func newParser(file string, source string, tokens []token.Token) *parser {
 	newTokenLookupTables()
 	return &parser{
 		file:     file,
+		source:   source,
 		tokens:   tokens,
 		position: 0,
 	}
 }
 
-func Parse(file string, tokens []token.Token) ast.BlockStatement {
-	p := newParser(file, tokens)
+func Parse(file string, source string, tokens []token.Token) ast.BlockStatement {
+	p := newParser(file, source, tokens)
 	body := []ast.Statement{}
 
 	for !p.isEOF() {

@@ -75,6 +75,10 @@ type TokenPosition struct {
 	Line   uint
 }
 
+func (p TokenPosition) Value() (uint, uint, uint) {
+	return p.Index, p.Column, p.Line
+}
+
 type Token struct {
 	Kind     TokenKind
 	Value    string

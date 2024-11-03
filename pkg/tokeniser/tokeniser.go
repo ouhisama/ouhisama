@@ -5,7 +5,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/ouhisama/ouhisama/pkg/logger"
+	"github.com/alecthomas/colour"
 	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
@@ -144,11 +144,10 @@ func Tokenise(file string, source string) []token.Token {
 		}
 
 		if !matched {
-			coloumn, line := t.position.column, t.position.line
-			character := string(t.source[t.position.index])
-			err, code := logger.UnrecongnisedTokenError(file, t.source, character, t.position.index, line, coloumn)
-			fmt.Println(err)
-			os.Exit(int(code))
+			msg := fmt.Sprintf("Got an unrecongnised token `%v` while tokenising", string(t.source[t.position.index]))
+			advice := colour.Sprintf("try removing this ^Sstupid^R^1 unrecongnised token")
+			t.error(unrecongnisedToken, msg, advice, "")
+			os.Exit(1)
 		}
 	}
 

@@ -5,8 +5,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/alecthomas/colour"
 	"github.com/ouhisama/ouhisama/pkg/ast"
-	"github.com/ouhisama/ouhisama/pkg/logger"
 	"github.com/ouhisama/ouhisama/pkg/token"
 )
 
@@ -23,18 +23,23 @@ func parseBinaryExpression(p *parser, bp bindingPower, left ast.Expression) ast.
 func parsePrimaryExpression(p *parser) ast.Expression {
 	switch p.at().Kind {
 	case token.Number:
-		t := p.eat()
-		value, _ := strconv.ParseFloat(string(t.Value), 64)
-		// if err != nil {
-		// 	log.Fatalf("ERROR Failed to convert the value type of `%v` unexpectedly while creating a primary expression\n", t.Value)
-		// }
+		t := p.at()
+		value, err := strconv.ParseFloat(string(t.Value), 64)
+		if err != nil {
+			msg := fmt.Sprintf("Failed to convert the type of `%v` unexpectedly while parsing a primary expression", t.Value)
+			advice := "We don't know why it couldn't be parsed to a float"
+			p.error(cannotParseFloat, msg, advice, err.Error())
+			os.Exit(1)
+		}
+		p.advance()
 		return ast.NumberExpression{
 			Value: value,
 		}
 	default:
-		err, code := logger.UnexpectedTokenError(p.file, p.at())
-		fmt.Println(err)
-		os.Exit(int(code))
+		msg := fmt.Sprintf("Got an unexpected token `%v` while parsing an expression", p.at().Value)
+		advice := "check your code syntax or just remove this"
+		p.error(unexpectedToken, msg, advice, "")
+		os.Exit(1)
 		return nil
 	}
 }
@@ -43,9 +48,10 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 	t := p.at()
 	nudHandler, found := nullDenotationLookupTable[t.Kind]
 	if !found {
-		err, code := logger.NoNudHandlerError(p.file, t)
-		fmt.Println(err)
-		os.Exit(int(code))
+		msg := fmt.Sprintf("No null denotation handler for the token `%v` while parsing an expression", t.Value)
+		advice := colour.Sprintf("you might put an incorrect stuff ^Slike you^R^1 here")
+		p.error(noNudHandler, msg, advice, "")
+		os.Exit(1)
 	}
 
 	left := nudHandler(p)
@@ -53,9 +59,10 @@ func parseExpression(p *parser, bp bindingPower) ast.Expression {
 		t := p.at()
 		ledHandler, found := leftDenotationLookupTable[t.Kind]
 		if !found {
-			err, code := logger.NoLedHandlerError(p.file, t)
-			fmt.Println(err)
-			os.Exit(int(code))
+			msg := fmt.Sprintf("No left denotation handler for the token `%v` while parsing an expression", t.Value)
+			advice := colour.Sprintf("you might put an incorrect stuff ^Slike you^R^1 here")
+			p.error(noLedHandler, msg, advice, "")
+			os.Exit(1)
 		}
 		left = ledHandler(p, bindingPowerLookupTable[p.at().Kind], left)
 	}
