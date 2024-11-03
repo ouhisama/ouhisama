@@ -26,7 +26,7 @@ func parsePrimaryExpression(p *parser) ast.Expression {
 		t := p.at()
 		value, err := strconv.ParseFloat(string(t.Value), 64)
 		if err != nil {
-			// Program must't get here
+			// Program mustn't get here
 
 			// msg := fmt.Sprintf("Failed to convert the type of `%v` unexpectedly while parsing a primary expression", t.Value)
 			// advice := "We don't know why it couldn't be parsed to a float"
@@ -38,7 +38,7 @@ func parsePrimaryExpression(p *parser) ast.Expression {
 			Value: value,
 		}
 	default:
-		// Program must't get here
+		// Program mustn't get here
 		os.Exit(1)
 		return nil
 	}

@@ -37,7 +37,7 @@ func (p *parser) previous() token.Token {
 	if p.position != 0 {
 		return p.tokens[p.position-1]
 	} else {
-		// Program must't get here
+		// Program mustn't get here
 		os.Exit(1)
 		return token.Token{}
 	}
