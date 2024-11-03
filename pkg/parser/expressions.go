@@ -44,6 +44,13 @@ func parsePrimaryExpression(p *parser) ast.Expression {
 	}
 }
 
+func parseGroupingExpression(p *parser) ast.Expression {
+	p.advance()
+	expression := parseExpression(p, zero)
+	p.want(token.RBracket)
+	return expression
+}
+
 func parseExpression(p *parser, bp bindingPower) ast.Expression {
 	t := p.at()
 	nudHandler, found := nullDenotationLookupTable[t.Kind]

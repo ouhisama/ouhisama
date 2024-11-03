@@ -66,4 +66,5 @@ func newTokenLookupTables() {
 	newLeftDenotation(token.Hashtag, multiplicative, parseBinaryExpression)
 
 	newNullDenotation(token.Number, parsePrimaryExpression)
+	newNullDenotation(token.LBracket, parseGroupingExpression)
 }
