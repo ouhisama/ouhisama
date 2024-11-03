@@ -23,21 +23,31 @@ func (p *parser) error(kind errorKind, msg string, advice string, detail string)
 	t := p.at()
 	index, column, line := t.Position.Value()
 
-	end := index
+	unknown := string(source[index])
+
+	if unknown == "\n" {
+		unknown = " "
+	}
+
+	rest := ""
 	for i, char := range source[index:] {
 		if string(char) == "\n" {
-			end += uint(i)
-			break
+			if i == 0 {
+				break
+			} else {
+				rest = source[index+uint(len(unknown)):index+uint(i)]
+				break
+			}
 		} else if i == len(source[index:])-1 {
-			end += uint(i + 1)
+			rest = source[index+uint(len(unknown)):index + uint(i+1)]
 			break
 		}
 	}
 
 	err := fmt.Sprintf("P%0*d", 3, kind)
-	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], t.Value, source[index+t.Length:end])
+	code := colour.Sprintf("^7%v^1%v^7%v", source[index+1-column:index], unknown, rest)
 
-	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat(" ", int(column)-1), strings.Repeat("^", len(t.Value)), advice)
+	hint := colour.Sprintf("%v^1%v %v^R", strings.Repeat(" ", int(column)-1), strings.Repeat("^", int(t.Length)), advice)
 
 	if detail != "" {
 		detail = "\n" + detail + "\n"
